@@ -30,3 +30,20 @@ new_data <- loan_data[-index_highage, ]
 
 # Make bivariate scatterplot of age and annual income
 plot(loan_data$age, loan_data$annual_inc, xlab = "Age", ylab = "Annual Income")
+
+##Deleting Missing Data
+
+# Look at summary of loan_data
+summary(loan_data$int_rate)
+
+# Get indices of missing interest rates: na_index
+na_index <- which(is.na(loan_data$int_rate))
+
+# Remove observations with missing interest rates: loan_data_delrow_na
+loan_data_delrow_na <- loan_data[-na_index, ]
+
+# Make copy of loan_data
+loan_data_delcol_na <- loan_data
+
+# Delete interest rate column from loan_data_delcol_na
+loan_data_delcol_na$int_rate <- NULL
