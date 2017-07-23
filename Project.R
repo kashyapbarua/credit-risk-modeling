@@ -61,3 +61,19 @@ loan_data_replace$int_rate[na_index] <- median_ir
 
 # Check if the NAs are gone
 summary(loan_data_replace$int_rate)
+
+##Keeping Missing Values
+
+# Make the necessary replacements in the coarse classification example below 
+loan_data$ir_cat <- rep(NA, length(loan_data$int_rate))
+
+loan_data$ir_cat[which(loan_data$int_rate <= 8)] <- "0-8"
+loan_data$ir_cat[which(loan_data$int_rate > 8 & loan_data$int_rate <= 11)] <- "8-11"
+loan_data$ir_cat[which(loan_data$int_rate > 11 & loan_data$int_rate <= 13.5)] <- "11-13.5"
+loan_data$ir_cat[which(loan_data$int_rate > 13.5)] <- "13.5+"
+loan_data$ir_cat[which(is.na(loan_data$int_rate))] <- "Missing"
+
+loan_data$ir_cat <- as.factor(loan_data$ir_cat)
+
+# Look at your new variable using plot()
+plot(loan_data$ir_cat)
