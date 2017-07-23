@@ -77,3 +77,17 @@ loan_data$ir_cat <- as.factor(loan_data$ir_cat)
 
 # Look at your new variable using plot()
 plot(loan_data$ir_cat)
+
+##Splitting the dataset
+
+# Set seed of 567
+set.seed(567)
+
+# Store row numbers for training set: index_train
+index_train <- sample(1:nrow(loan_data), 2 / 3 * nrow(loan_data))
+
+# Create training set: training_set (Create the training set by selecting the row numbers stored in index_train from the data set loan_data. Save the result to training_set.)
+training_set <- loan_data[index_train, ]
+
+# Create test set: test_set (The test set contains the rows that are not in index_train. Copy the code that you used to create the training set, but use the negative sign (-) right before index_train inside the square brackets. Save the result to test_set.)
+test_set <- loan_data[-index_train, ]
