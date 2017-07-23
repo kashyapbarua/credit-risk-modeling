@@ -123,3 +123,13 @@ log_model_multi <- glm(loan_status ~ age + ir_cat + grade + loan_amnt +
 
 # Obtain significance levels using summary()
 summary(log_model_multi)
+
+##Predicting the probability of default
+
+#After having obtained all the predictions for the test set elements, it is useful to get an initial idea of how good the model is at discriminating by looking at the range of predicted probabilities.
+
+# Build the logistic regression model
+predictions_all_small <- predict(log_model_small, newdata = test_set, type = "response")
+
+# Look at the range of the object "predictions_all_small"
+range(predictions_all_small)
