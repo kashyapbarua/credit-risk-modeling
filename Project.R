@@ -91,3 +91,14 @@ training_set <- loan_data[index_train, ]
 
 # Create test set: test_set (The test set contains the rows that are not in index_train. Copy the code that you used to create the training set, but use the negative sign (-) right before index_train inside the square brackets. Save the result to test_set.)
 test_set <- loan_data[-index_train, ]
+
+## Creating a confusion Matrix
+
+# Create confusion matrix
+conf_matrix <- table(test_set$loan_status, model_pred)
+
+# Compute classification accuracy
+(6092 + 349) / nrow(test_set)
+
+# Compute sensitivity
+349 / 1037
