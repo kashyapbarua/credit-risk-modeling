@@ -102,3 +102,24 @@ conf_matrix <- table(test_set$loan_status, model_pred)
 
 # Compute sensitivity
 349 / 1037
+
+##Constructing the Logistic Regression model
+
+# Build a glm model with variable ir_cat as a predictor
+log_model_cat <- glm(loan_status ~ ir_cat, family = "binomial", data = training_set)
+
+
+# Print the parameter estimates 
+log_model_cat
+
+# Look at the different categories in ir_cat using table()
+table(loan_data$ir_cat)
+
+##Building the multivariate logistic regression model
+
+# Build the logistic regression model
+log_model_multi <- glm(loan_status ~ age + ir_cat + grade + loan_amnt +
+                         annual_inc , family = "binomial", data = training_set)
+
+# Obtain significance levels using summary()
+summary(log_model_multi)
