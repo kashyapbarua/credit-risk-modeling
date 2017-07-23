@@ -47,3 +47,17 @@ loan_data_delcol_na <- loan_data
 
 # Delete interest rate column from loan_data_delcol_na
 loan_data_delcol_na$int_rate <- NULL
+
+##Replacing Missing data
+
+# Compute the median of int_rate
+median_ir <- median(loan_data$int_rate, na.rm = TRUE)
+
+# Make copy of loan_data
+loan_data_replace <- loan_data
+
+# Replace missing interest rates with median
+loan_data_replace$int_rate[na_index] <- median_ir
+
+# Check if the NAs are gone
+summary(loan_data_replace$int_rate)
