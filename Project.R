@@ -133,3 +133,14 @@ predictions_all_small <- predict(log_model_small, newdata = test_set, type = "re
 
 # Look at the range of the object "predictions_all_small"
 range(predictions_all_small)
+
+#Making the model more descriptive
+
+# Build the logistic regression model
+log_model_full <- glm(loan_status ~ ., family = "binomial", data = training_set)
+
+# Make PD-predictions for all test set elements using the the full logistic regression model
+predictions_all_full <- predict(log_model_full, newdata = test_set, type = "response")
+
+# Look at the predictions range
+range(predictions_all_full)
