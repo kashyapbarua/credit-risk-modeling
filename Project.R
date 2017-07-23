@@ -19,3 +19,14 @@ hist_1$breaks
 # Change number of breaks and add labels: hist_2
 hist_2 <- hist(loan_data$loan_amnt, breaks = 200, xlab = "Loan amount", 
                main = "Histogram of the loan amount")
+# Plot the age variable
+plot(loan_data$age, ylab = "Age")
+
+# Save the outlier's index to index_highage
+index_highage <- which(loan_data$age > 122)
+
+# Create data set new_data with outlier deleted
+new_data <- loan_data[-index_highage, ]
+
+# Make bivariate scatterplot of age and annual income
+plot(loan_data$age, loan_data$annual_inc, xlab = "Age", ylab = "Annual Income")
