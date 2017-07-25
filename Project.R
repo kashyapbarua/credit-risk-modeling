@@ -144,3 +144,15 @@ predictions_all_full <- predict(log_model_full, newdata = test_set, type = "resp
 
 # Look at the predictions range
 range(predictions_all_full)
+
+# the specification of a cut-off can make the difference to obtain a good confusion matrix.
+
+# The code for the logistic regression model and the predictions is given below
+log_model_full <- glm(loan_status ~ ., family = "binomial", data = training_set)
+predictions_all_full <- predict(log_model_full, newdata = test_set, type = "response")
+
+# Make a binary predictions-vector using a cut-off of 15%
+pred_cutoff_15 <- ifelse(predictions_all_full > 0.15, 1, 0)
+
+# Construct a confusion matrix
+table(test_set$loan_status, pred_cutoff_15)
