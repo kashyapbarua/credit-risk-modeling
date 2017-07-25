@@ -258,3 +258,26 @@ ptree_loss_matrix <- prune(tree_loss_matrix, cp = 0.0012788)
 
 # Use prp() and argument extra = 1 to plot the pruned tree
 prp(ptree_loss_matrix, extra = 1)
+
+##Specify higher weights for default, the model will assign higher importance to classifying defaults correctly.
+
+# set a seed and run the code to obtain a tree using weights, minsplit and minbucket
+set.seed(345)
+tree_weights <- rpart(loan_status ~ ., method = "class",
+                      data = training_set, weights = case_weights,
+                      control = rpart.control(minsplit = 5, minbucket = 2, cp = 0.001))
+
+# Plot the cross-validated error rate for a changing cp
+plotcp(tree_weights)
+
+# Create an index for of the row with the minimum xerror
+index <- which.min(tree_weights$cp[ , "xerror"])
+
+# Create tree_min
+tree_min <- tree_weights$cp[index, "CP"]
+
+#  Prune the tree using tree_min
+ptree_weights <- prune(tree_weights, tree_min)
+
+# Plot the pruned tree using the rpart.plot()-package
+prp(ptree_weights, extra = 1)
