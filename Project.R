@@ -342,3 +342,28 @@ plot(strategy_loss_matrix$accept_rate, strategy_loss_matrix$bad_rate,
      type = "l", xlab = "Acceptance rate", 
      ylab = "Bad rate", lwd = 2, main = "tree")
 
+#ROC-curves for comparison of logistic regression models
+
+# Load the pROC-package
+library(pROC)
+
+# Construct the objects containing ROC-information
+ROC_logit <- roc(test_set$loan_status, predictions_logit)
+ROC_probit <- roc(test_set$loan_status, predictions_probit)
+ROC_cloglog <- roc(test_set$loan_status, predictions_cloglog)
+ROC_all_full <- roc(test_set$loan_status, predictions_all_full)
+
+# Draw all ROCs on one plot
+plot(ROC_logit)
+lines(ROC_probit, col = "blue")
+lines(ROC_cloglog, col = "red")
+lines(ROC_all_full, col = "green")
+
+#It seems that the link function does not have a big impact on the ROC here, and the main trigger of a better ROC is the inclusion of more variables in a model. To get an exact idea of the performance of the ROC-curves, have a look at the AUC's, using function auc().
+
+# Compute the AUCs
+auc(ROC_logit)
+auc(ROC_probit)
+auc(ROC_cloglog)
+auc(ROC_all_full)
+
