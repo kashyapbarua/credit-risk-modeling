@@ -207,3 +207,16 @@ gain <- gini_root - 446 / 500 * gini_ll - 54 / 500 * gini_rl
 # compare the gain-column in small_tree$splits with our computed gain, multiplied by 500, and assure they are the same
 small_tree$splits
 improve <- gain * 500
+
+##Including a Loss Matrix
+# Change the code provided in the video such that a decision tree is constructed using a loss matrix penalizing 10 times more heavily for misclassified defaults.
+tree_loss_matrix  <- rpart(loan_status ~ ., method = "class", data = training_set,
+                           parms = list(loss = matrix(c(0, 10, 1, 0), ncol = 2)),
+                           control = rpart.control(cp = 0.001))
+
+# Plot the decision tree
+plot(tree_loss_matrix, uniform = TRUE)
+
+# Add labels to the decision tree
+text(tree_loss_matrix)
+
