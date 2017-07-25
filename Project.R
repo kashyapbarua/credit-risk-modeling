@@ -220,3 +220,24 @@ plot(tree_loss_matrix, uniform = TRUE)
 # Add labels to the decision tree
 text(tree_loss_matrix)
 
+##identify which complexity parameter (CP) will minimize the cross-validated error results, then prune your tree based on this value.
+
+# tree_prior is loaded in your workspace
+
+# Plot the cross-validated error rate as a function of the complexity parameter
+plotcp(tree_prior)
+
+# Use printcp() to identify for which complexity parameter the cross-validated error rate is minimized
+printcp(tree_prior)
+
+# Create an index for of the row with the minimum xerror
+index <- which.min(tree_prior$cptable[, "xerror"])
+
+# Create tree_min
+tree_min <- tree_prior$cptable[index, "CP"]
+
+#  Prune the tree using tree_min
+ptree_prior <- prune(tree_prior, cp = tree_min)
+
+# Use prp() to plot the pruned tree
+prp(ptree_prior)
