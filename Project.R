@@ -260,7 +260,7 @@ ptree_loss_matrix <- prune(tree_loss_matrix, cp = 0.0012788)
 prp(ptree_loss_matrix, extra = 1)
 
 ##Specify higher weights for default, the model will assign higher importance to classifying defaults correctly.
-
+#This vector contains weights of 1 for the non-defaults in the training set, and weights of 3 for defaults in the training sets.
 # set a seed and run the code to obtain a tree using weights, minsplit and minbucket
 set.seed(345)
 tree_weights <- rpart(loan_status ~ ., method = "class",
@@ -301,3 +301,44 @@ acc_undersample <- sum(diag(confmat_undersample)) / nrow(test_set)
 acc_prior <- sum(diag(confmat_prior)) / nrow(test_set)
 acc_loss_matrix <- sum(diag(confmat_loss_matrix)) / nrow(test_set)
 acc_weights <- sum(diag(confmat_weights)) / nrow(test_set)
+
+#Computing a bad rate given a fixed acceptance rate
+
+# Make predictions for the probability of default using the pruned tree and the test set.
+prob_default_prior <- predict(ptree_prior, newdata = test_set)[ ,2]
+
+# Obtain the cutoff for acceptance rate 80%
+cutoff_prior <- quantile(prob_default_prior, 0.8)
+
+# Obtain the binary predictions.
+bin_pred_prior_80 <- ifelse(prob_default_prior > cutoff_prior, 1, 0)
+
+# Obtain the actual default status for the accepted loans
+accepted_status_prior_80 <- test_set$loan_status[bin_pred_prior_80 == 0]
+
+# Obtain the bad rate for the accepted loans
+sum(accepted_status_prior_80) / length(accepted_status_prior_80)
+
+#Better insight to define an acceptance strategy.
+
+# Have a look at the function strategy_bank
+strategy_bank
+
+# Apply the function strategy_bank to both predictions_cloglog and predictions_loss_matrix
+strategy_cloglog <- strategy_bank(predictions_cloglog)
+strategy_loss_matrix <- strategy_bank(predictions_loss_matrix)
+
+# Obtain the strategy tables for both prediction-vectors
+strategy_cloglog$table
+strategy_loss_matrix$table
+
+# Draw the strategy functions
+par(mfrow = c(1,2))
+plot(strategy_cloglog$accept_rate, strategy_cloglog$bad_rate, 
+     type = "l", xlab = "Acceptance rate", ylab = "Bad rate", 
+     lwd = 2, main = "logistic regression")
+
+plot(strategy_loss_matrix$accept_rate, strategy_loss_matrix$bad_rate, 
+     type = "l", xlab = "Acceptance rate", 
+     ylab = "Bad rate", lwd = 2, main = "tree")
+
